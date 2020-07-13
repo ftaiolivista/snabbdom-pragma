@@ -4,37 +4,39 @@ import fs from 'fs'
 
 import test from 'ava'
 
-import h from 'snabbdom/h'
-import { createElement as src } from '../src/index'
-import { createElement as dist } from '../dist/index'
+import { h } from 'snabbdom/h'
+import SRC from '../src/index.js'
+import {createElement as dist} from '../dist/index.es6.js'
 
-const fixturesDir = path.join(__dirname, 'snabbdom-specs')
+const src = SRC.createElement
 
-fs.readdirSync(fixturesDir).forEach((caseName) => {
-  test(`src - Should works for ${caseName.split('-').join(' ')}`, (t) => {
+const fixturesDir = 'snabbdom-specs'
+
+fs.readdirSync('test/'+fixturesDir).forEach((caseName) => {
+  test(`src - Should works for ${caseName.split('-').join(' ')}`, async (t) => {
     const fixtureDir = path.join(fixturesDir, caseName)
 
-    const actual = require(
-      path.join(fixtureDir, 'actual.js')
-    ).default(src)
+    const actual = (await import(
+      './' + path.join(fixtureDir, 'actual.js')
+    )).default(src)
 
-    const expected = require(
-      path.join(fixtureDir, 'expected.js')
-    ).default(h)
+    const expected = (await import(
+      './' + path.join(fixtureDir, 'expected.js')
+    )).default(h)
 
     t.deepEqual(actual, expected)
   })
 
-  test(`dist - Should works for ${caseName.split('-').join(' ')}`, (t) => {
+  test(`dist - Should works for ${caseName.split('-').join(' ')}`, async (t) => {
     const fixtureDir = path.join(fixturesDir, caseName)
 
-    const actual = require(
-      path.join(fixtureDir, 'actual.js')
-    ).default(dist)
+    const actual = (await import(
+      './' + path.join(fixtureDir, 'actual.js')
+    )).default(dist)
 
-    const expected = require(
-      path.join(fixtureDir, 'expected.js')
-    ).default(h)
+    const expected = (await import(
+      './' + path.join(fixtureDir, 'expected.js')
+    )).default(h)
 
     t.deepEqual(actual, expected)
   })

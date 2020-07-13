@@ -1,8 +1,18 @@
 
 import path from 'path'
 import fs from 'fs'
-
+import Buble from 'buble'
+import BabelCore from 'babel-core'
+import Traceur from 'traceur'
+import Typescript from 'typescript'
 import test from 'ava'
+
+const {compile} = Traceur
+const bubleTransform = Buble.transform
+const babelTransform = BabelCore.transform
+const transpileModule = Typescript.transpileModule
+
+const __dirname = './test/'
 
 const fixturesDir = path.join(__dirname, 'jsx-custom-modules-specs')
 
@@ -10,7 +20,7 @@ fs.readdirSync(fixturesDir).forEach((caseName) => {
   test(`trans - Should Bublé transform ${caseName.split('-').join(' ')}`, (t) => {
     const fixtureDir = path.join(fixturesDir, caseName)
 
-    const actual = require('buble').transform(
+    const actual = bubleTransform(
       fs.readFileSync(
         path.join(fixtureDir, 'actual.js')
       ).toString(), {
@@ -33,7 +43,7 @@ fs.readdirSync(fixturesDir).forEach((caseName) => {
   test(`trans - Should Babel transform ${caseName.split('-').join(' ')}`, (t) => {
     const fixtureDir = path.join(fixturesDir, caseName)
 
-    const actual = require('babel-core').transform(
+    const actual = babelTransform(
       fs.readFileSync(
         path.join(fixtureDir, 'actual.js')
       ).toString(), {
@@ -55,7 +65,7 @@ fs.readdirSync(fixturesDir).forEach((caseName) => {
   test(`trans - Should Traceur transform ${caseName.split('-').join(' ')}`, (t) => {
     const fixtureDir = path.join(fixturesDir, caseName)
 
-    const actual = require('traceur').compile(
+    const actual = compile(
       fs.readFileSync(
         path.join(fixtureDir, 'actual.js')
       ).toString(), {

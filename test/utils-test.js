@@ -1,5 +1,5 @@
 import test from 'ava'
-import { reduceDeep } from '../src/fn'
+import { reduceDeep } from '../src/fn.js'
 
 test('utils - reduceDeep with flat array', (t) => {
   const arr = ['a', 'b', 'c', 'd', 'e']
